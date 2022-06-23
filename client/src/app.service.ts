@@ -1,22 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
+
+interface IProduct {
+  id: number;
+  productName: string;
+  description: string;
+  priceInCent: number;
+}
+
+const products: IProduct[] = [];
 
 @Injectable()
 export class AppService {
-  constructor(
-    @Inject('GREETING_SERVICE') private readonly client: ClientProxy,
-  ) {}
-
-  getHello() {
-    return this.client.send({ cmd: 'greeting' }, 'Progressive Coder');
+  all(): IProduct[] {
+    return products;
   }
 
-  async getHelloAsync() {
-    const message = await this.client.send(
-      { cmd: 'greeting-async' },
-      'Progressive Coder',
-    );
-
-    return message;
+  create(product: IProduct): void {
+    products.push(product);
   }
 }

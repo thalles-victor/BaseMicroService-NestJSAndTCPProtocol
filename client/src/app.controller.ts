@@ -1,12 +1,16 @@
-import { Controller, Get, Post } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  @MessagePattern({ cmd: 'greeting' })
+  getGreetingMessage(name: string): string {
+    console.log(name);
+    return `Hello ${name}`;
+  }
 
-  @Get()
-  getHello() {
-    return this.appService.getHello();
+  @MessagePattern({ cmd: 'greeting-async' })
+  async getGreetingMessageAsync(name: string): Promise<string> {
+    return `Hello ${name}`;
   }
 }
